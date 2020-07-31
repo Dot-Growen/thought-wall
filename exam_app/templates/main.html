@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <title> The Great Thought </title>
+</head>
+
+<body class="index_body">
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <div class="header">
+        <h2 class="header_title">Hi {{user.first_name}} {{user.last_name}}! </h2>
+        <div class="head_btn">
+            <a class="head_1 btn btn-light" href="/logout">Log Out</a>
+        </div>
+    </div>
+    <div class="main_area_new">
+
+        <form class="thought_input" action="/add" method="POST">
+            {% csrf_token %}
+            <div class="form-group row">
+                <div class="col-sm-9">
+                    <input type="text" placeholder="Post a Great Thought Here!" class="form-control" id="desc"
+                        name="desc">
+                </div>
+                <button type="submit" class="col-sm-3 btn btn-primary">Add Thought</button>
+            </div>
+        </form>
+
+        <hr class="line1">
+
+        {%for thought in thoughts%}
+        <div class="thoughts">
+            <div class=" row">
+                <p class="col-sm-2">{{thought.thought_by.first_name}} says:</p>
+                <p class="col-sm-8 thought_desc">{{thought.desc}}</p>
+                {%if user.id == thought.thought_by.id%}
+                <a class="delete col-sm btn btn-outline-danger" href="/delete/{{thought.id}}">Delete</a>
+                {%endif%}
+            </div>
+        </div>
+
+        <div class="bottomt">
+            <div class="thought_foot">
+                <a class='btn btn-link' href="/thoughts/{{thought.id}}">Details</a>
+                <a class='thought_likes'>{{thought.likes.all|length}} people like this</a>
+            </div>
+        </div>
+
+        {%endfor%}
+
+    </div>
+
+</body>
+
+</html>

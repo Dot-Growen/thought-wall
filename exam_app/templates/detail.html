@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <title> The Great Thought  </title>
+</head>
+
+<body class="index_body">
+    <div class="header">
+        <h2 class="header_title">Hi {{user.first_name}} {{user.last_name}}! </h2>
+        <div class="head_btn">
+            <a class="head_1 btn btn-primary" href="/thoughts">Dashboard</a>
+            <a class="head_1 btn btn-light" href="/logout">Log Out</a>
+        </div>
+    </div>
+    <div class="main_area_detail">
+
+        <div class="row thoughts_detail">
+            <p class="col-sm-3">{{thought.thought_by.first_name}} says:</p>
+            <p class="col-sm-9 thought_desc">{{thought.desc}}</p>
+            <div class="like_btn">
+                {%if user in thought.likes.all%}
+                <a class="like_1 btn btn-light" href="/unlike/{{thought.id}}">unlike</a>
+                {%else%}
+                <a class="like_1 btn btn-primary" href="/like/{{thought.id}}">like</a>
+                {%endif%}
+            </div>
+        </div>
+
+        <div>
+            <h6>People who liked this thought:</h6>
+            <div class="over_load">
+                <table class=" table table-sm table-bordered table-dark">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">First Name</td>
+                            <th scope="col">Last Name</td>
+                        </tr>
+                    </thead>
+
+                    {%for user in users_liked%}
+                    {%if user in thought.likes.all%}
+
+                    <tr>
+                        <td scope="col">{{user.first_name}}</td>
+                        <td scope="col">{{user.last_name}}</td>
+                    </tr>
+                    {%endif%}
+                    {%endfor%}
+                    
+                    <tr>
+                        {%for user in userby_liked%}
+                        {%if user in thought.likes.all%}
+                        <td scope="col">{{user.first_name}}</td>
+                        <td scope="col">{{user.last_name}}</td>
+                        {%endif%}
+                        {%endfor%}
+                    </tr>
+
+                </table>
+
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
